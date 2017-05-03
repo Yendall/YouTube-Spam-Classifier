@@ -10,9 +10,14 @@ from include.DocumentCollection import *
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import KFold
 
 
-def confusion_matrix(actual, predicted):
+def cross_validation():
+    print "LOL"
+
+
+def build_confusion_matrix(actual, predicted):
     print "Will implement later ;)"
     print confusion_matrix(actual, predicted)
 
@@ -26,7 +31,7 @@ def k_nearest_neighbours(collection):
     targets = collection.document_map[dataset]['class'].values
     classifier.fit(counts, targets)
 
-    examples = ["watch me dance on cam", "check out my website for cheap deals www.maxyendall.com.au"]
+    examples = ["new weight loss diet", "check out my website for cheap deals www.maxyendall.com.au"]
     example_counts = count_vectorizer.transform(examples)
     predictions = classifier.predict(example_counts)
     print "K-Nearest-Neighbours Predictions: ", predictions
@@ -41,7 +46,7 @@ def naive_bayes(collection):
     targets = collection.document_map[dataset]['class'].values
     classifier.fit(counts, targets)
 
-    examples = ["watch me dance on cam", "check out my website for cheap deals www.maxyendall.com.au"]
+    examples = ["hot singles in your area", "check out my website for cheap deals www.maxyendall.com.au"]
     example_counts = count_vectorizer.transform(examples)
     predictions = classifier.predict(example_counts)
     print "Naive Bayes Predictions: ", predictions

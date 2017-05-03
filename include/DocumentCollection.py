@@ -14,8 +14,6 @@ class DocumentCollection:
     # Entire set Hash Tables
     feature_set = {}
     document_map = {}
-    training_set = {}
-    test_set = {}
 
     def __init__(self):
         pass
