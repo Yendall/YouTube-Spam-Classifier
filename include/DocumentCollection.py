@@ -1,10 +1,8 @@
-from sklearn.feature_extraction.text import CountVectorizer
-
-from settings import *
-import pandas as pd
-from pandas import DataFrame
 import random
-import numpy
+
+import pandas as pd
+from Settings import *
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 class DocumentCollection:
@@ -33,6 +31,8 @@ class DocumentCollection:
                 file_path = DATA_ROOT + "/" + filename
                 file_key = os.path.splitext(filename)[0]
                 self.document_map[file_key] = pd.read_csv(file_path, sep=',', names=header, skiprows=1)
+                self.document_map[file_key]['class'] = \
+                    self.document_map[file_key]['class'].map({1: 'Spam', 0: 'Not Spam'})
 
     def print_collection(self):
         """
@@ -41,7 +41,7 @@ class DocumentCollection:
         """
         for key, value in self.document_map.iteritems():
             print "\nComment Collection for: ", key
-            print value.to_string()
+            #print value.to_string()
 
     def leave_one_out(self):
         """
@@ -50,6 +50,9 @@ class DocumentCollection:
         """
         rand_set = random.choice(self.document_map.keys())
         print self.document_map[rand_set]
+
+    def extract_features_cross(self, data, count_vectorizer):
+        return count_vectorizer.fit_transform(data)
 
     def extract_features(self, dataset, count_vectorizer):
         """
