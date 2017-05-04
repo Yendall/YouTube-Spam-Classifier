@@ -41,7 +41,7 @@ class DocumentCollection:
         """
         for key, value in self.document_map.iteritems():
             print "\nComment Collection for: ", key
-            #print value.to_string()
+            print value.to_string()
 
     def leave_one_out(self):
         """
