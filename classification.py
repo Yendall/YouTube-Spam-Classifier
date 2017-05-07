@@ -1,6 +1,5 @@
 """
 s3436993 - Max Yendall
-
 Assignment 2 - Practical Data Science
 """
 
@@ -11,11 +10,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.pipeline import Pipeline
+import pprint
 
 
 def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngram_flag):
     image_name = "Confusion_Matrix_" + str(iteration) + ".png"
-    directory = "data/Confusion_Matrices/"+classifier_name+"/"
+    directory = "data/Confusion_Matrices/" + classifier_name + "/"
     if ngram_flag:
         directory += "nGram_Results/"
     else:
@@ -36,7 +37,8 @@ def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngra
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
 
-    plt.savefig(directory+image_name)
+    plt.savefig(directory + image_name)
+    plt.close('all')
 
 
 def cross_validation(collection):
@@ -52,7 +54,6 @@ def cross_validation(collection):
 
 
 def analyse_results(actual, predicted, iteration, classifier_name, ngram_flag):
-
     # Output Confusion Matrix
     cm = confusion_matrix(actual, predicted)
     score = f1_score(actual, predicted, pos_label="Spam")
@@ -64,7 +65,7 @@ def analyse_results(actual, predicted, iteration, classifier_name, ngram_flag):
     return score, precision, recall
 
 
-def predict(collection, classifier, name, ngrams):
+def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
     folds = 10
     f1_scores = []
     precision_scores = []
@@ -73,54 +74,73 @@ def predict(collection, classifier, name, ngrams):
     for fold in range(0, folds):
         # Split data into training and test sets
         comment_train, comment_test, class_train, class_test = cross_validation(collection)
+        pipeline.fit(comment_train, class_train)
 
-        # Vectorise the features of the training set by extract term frequencies from the comments
-        if ngrams:
-            count_vectorizer = CountVectorizer(ngram_range=(1, 2))
-        else:
-            count_vectorizer = CountVectorizer()
-
-        comment_train = collection.extract_features_cross(comment_train, count_vectorizer)
-        classifier.fit(comment_train, class_train)
-
-        # Vectorise the features of the test set by transforming the set
-        comment_test = count_vectorizer.transform(comment_test)
         # Predict "spam" or "not spam" using the test set
-        predictions = classifier.predict(comment_test)
-
-        analysis = analyse_results(class_test, predictions, fold, name, ngrams)
+        predictions = pipeline.predict(comment_test)
+        pprint.pprint(pipeline.named_steps['vectorizer'].vocabulary_)
+        analysis = analyse_results(class_test, predictions, fold, name, ngram_flag)
         f1_scores.append(analysis[0])
         precision_scores.append(analysis[1])
         recall_scores.append(analysis[2])
 
-    f1_result = sum(f1_scores) / len(f1_scores)
-    precision_result = sum(precision_scores) / len(precision_scores)
-    recall_result = sum(recall_scores) / len(recall_scores)
+    f1_result = (sum(f1_scores) / len(f1_scores)) * 100
+    precision_result = (sum(precision_scores) / len(precision_scores)) * 100
+    recall_result = (sum(recall_scores) / len(recall_scores)) * 100
 
-    if ngrams:
-        print "Results for --", name, "-- classifier over ", folds, " Folds (1-gram and 2-gram):"
+    print "Results for --", name, "-- classifier over ", folds, sub_title
+    print "F1 Score: ", f1_result, "%"
+    print "Precision: ", precision_result, "%"
+    print "Recall: ", recall_result, "%", "\n"
+
+
+def build_pipeline(classifier, ngram_flag, tfidf_flag):
+    if ngram_flag and tfidf_flag:
+        return Pipeline([
+            ('vectorizer', CountVectorizer(ngram_range=(1, 2))),
+            ('tfidf_transformer', TfidfTransformer()),
+            ('classifier', classifier)
+        ])
+    elif ngram_flag and not tfidf_flag:
+        return Pipeline([
+            ('vectorizer', CountVectorizer(ngram_range=(1, 2))),
+            ('classifier', classifier)
+        ])
     else:
-        print "Results for --", name, "-- classifier over ", folds, " Folds:"
-    print "F1 Score: ", f1_result
-    print "Precision: ", precision_result
-    print "Recall: ", recall_result, "\n"
+        return Pipeline([
+            ('vectorizer', CountVectorizer()),
+            ('classifier', classifier)
+        ])
 
+
+def classifier_analysis(classifier, collection, title):
+    ngram_title = "(1-gram and 2-gram)"
+    tfidf_title = "(1-gram and 2-gram & TF-IDF)"
+    normal_title = "(Direct values)"
+
+    pipeline_predict(collection, build_pipeline(classifier, ngram_flag=False, tfidf_flag=False), title, False,
+                     normal_title)
+    pipeline_predict(collection, build_pipeline(classifier, ngram_flag=True, tfidf_flag=False), title, True,
+                     ngram_title)
+    pipeline_predict(collection, build_pipeline(classifier, ngram_flag=True, tfidf_flag=True), title, True,
+                     tfidf_title)
 
 def parse_data_collection():
     # Create new document collection
     collection = DocumentCollection()
     # Populate the document map with data frames and unique key-sets
     collection.populate_map()
-
     # Predict using MultiNomial Naive Bayes (ngram model and normal model)
-    naive_bayes_classifier = MultinomialNB()
-    predict(collection, naive_bayes_classifier, "MultiNomial Naive Bayes", True)
-    predict(collection, naive_bayes_classifier, "MultiNomial Naive Bayes", False)
+    nb_classifier = MultinomialNB()
+    # Create new Pipeline
+    title = "MultiNomial Naive Bayes"
+    classifier_analysis(nb_classifier, collection, title)
 
     # Predict using K Nearest Neighbours (n-gram model and normal model)
     knn_classifier = KNeighborsClassifier()
-    predict(collection, knn_classifier, "K Nearest Neighbours", True)
-    predict(collection, knn_classifier, "K Nearest Neighbours", False)
+    # Create new Pipelines
+    title = "K Nearest Neighbours"
+    classifier_analysis(knn_classifier, collection, title)
 
 
 if __name__ == "__main__": parse_data_collection()
