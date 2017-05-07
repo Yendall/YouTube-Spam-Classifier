@@ -2,8 +2,8 @@ import random
 
 import pandas as pd
 from Settings import *
-from sklearn.feature_extraction.text import CountVectorizer
-
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.pipeline import Pipeline
 
 class DocumentCollection:
     # Split collections by class as Hash Tables
@@ -52,6 +52,7 @@ class DocumentCollection:
         print self.document_map[rand_set]
 
     def extract_features_cross(self, data, count_vectorizer):
+
         return count_vectorizer.fit_transform(data)
 
     def extract_features(self, dataset, count_vectorizer):

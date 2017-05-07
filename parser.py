@@ -9,13 +9,17 @@ from include.DocumentCollection import *
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
-from sklearn.cross_validation import train_test_split, KFold, cross_val_score
+from sklearn.cross_validation import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score
 
 
-def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name):
+def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngram_flag):
     image_name = "Confusion_Matrix_" + str(iteration) + ".png"
     directory = "data/Confusion_Matrices/"+classifier_name+"/"
+    if ngram_flag:
+        directory += "nGram_Results/"
+    else:
+        directory += "Single_Results/"
     # Set class labels
     labels = ['Spam', 'Not Spam']
     # Create a matplotlib figure
@@ -33,7 +37,6 @@ def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name):
     plt.ylabel('Actual')
 
     plt.savefig(directory+image_name)
-    #plt.show()
 
 
 def cross_validation(collection):
@@ -48,7 +51,7 @@ def cross_validation(collection):
     return x_train[1], x_test[1], y_train[1], y_test[1]
 
 
-def analyse_results(actual, predicted, iteration, classifier_name):
+def analyse_results(actual, predicted, iteration, classifier_name, ngram_flag):
 
     # Output Confusion Matrix
     cm = confusion_matrix(actual, predicted)
@@ -56,13 +59,13 @@ def analyse_results(actual, predicted, iteration, classifier_name):
     precision = precision_score(actual, predicted, pos_label="Spam")
     recall = recall_score(actual, predicted, pos_label="Spam")
 
-    plot_confusion_matrix(cm, "Spam vs. Not Spam", iteration, classifier_name)
+    plot_confusion_matrix(cm, "Spam vs. Not Spam - Fold " + str(iteration), iteration, classifier_name, ngram_flag)
 
     return score, precision, recall
 
 
 def predict(collection, classifier, name, ngrams):
-    folds = 20
+    folds = 10
     f1_scores = []
     precision_scores = []
     recall_scores = []
@@ -85,7 +88,7 @@ def predict(collection, classifier, name, ngrams):
         # Predict "spam" or "not spam" using the test set
         predictions = classifier.predict(comment_test)
 
-        analysis = analyse_results(class_test, predictions, fold, name)
+        analysis = analyse_results(class_test, predictions, fold, name, ngrams)
         f1_scores.append(analysis[0])
         precision_scores.append(analysis[1])
         recall_scores.append(analysis[2])
@@ -111,7 +114,7 @@ def parse_data_collection():
 
     # Predict using MultiNomial Naive Bayes (ngram model and normal model)
     naive_bayes_classifier = MultinomialNB()
-    predict(collection, naive_bayes_classifier, "MultiNomial Naive Bayes",True)
+    predict(collection, naive_bayes_classifier, "MultiNomial Naive Bayes", True)
     predict(collection, naive_bayes_classifier, "MultiNomial Naive Bayes", False)
 
     # Predict using K Nearest Neighbours (n-gram model and normal model)
