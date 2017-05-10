@@ -11,7 +11,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 from sklearn.pipeline import Pipeline
-import pprint
 
 
 def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngram_flag):
@@ -120,7 +119,6 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
         recall_scores.append(analysis[2])
         accuracy_scores.append(analysis[3])
 
-
     f1_result = (sum(f1_scores) / len(f1_scores)) * 100
     precision_result = (sum(precision_scores) / len(precision_scores)) * 100
     recall_result = (sum(recall_scores) / len(recall_scores)) * 100
@@ -143,13 +141,13 @@ def build_pipeline(classifier, ngram_flag, tfidf_flag):
     """
     if ngram_flag and tfidf_flag:
         return Pipeline([
-            ('vectorizer', CountVectorizer(ngram_range=(1, 2))),
+            ('vectorizer', CountVectorizer(ngram_range=(1, 2), stop_words='english')),
             ('tfidf_transformer', TfidfTransformer()),
             ('classifier', classifier)
         ])
     elif ngram_flag and not tfidf_flag:
         return Pipeline([
-            ('vectorizer', CountVectorizer(ngram_range=(1, 2))),
+            ('vectorizer', CountVectorizer(ngram_range=(1, 2), stop_words='english')),
             ('classifier', classifier)
         ])
     else:
@@ -201,4 +199,5 @@ def parse_data_collection():
     classifier_analysis(knn_classifier, collection, title)
 
 
-if __name__ == "__main__": parse_data_collection()
+if __name__ == "__main__":
+    parse_data_collection()

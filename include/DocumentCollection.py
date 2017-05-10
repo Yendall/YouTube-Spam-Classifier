@@ -1,9 +1,8 @@
 import random
-
 import pandas as pd
 from Settings import *
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
+
 
 class DocumentCollection:
     # Split collections by class as Hash Tables
