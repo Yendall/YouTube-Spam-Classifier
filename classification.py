@@ -122,7 +122,7 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
     precision_result = (sum(precision_scores) / len(precision_scores)) * 100
     recall_result = (sum(recall_scores) / len(recall_scores)) * 100
     classification_error = (1-(sum(accuracy_scores) / len(accuracy_scores))) * 100
-
+    
     print "Results for --", name, "-- classifier over ", folds, "Folds - ", sub_title
     print "K-Fold Classification Error Rate: ", classification_error, "%"
     print "F1 Score: ", f1_result, "%"

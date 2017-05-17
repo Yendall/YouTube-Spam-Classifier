@@ -21,9 +21,9 @@ def contains_url(string):
 
 def author_visualisation(spam_collection):
     """
-    
-    :param spam_collection: 
-    :return: 
+    Fetch the top 5 spamming authors and visualise
+    :param spam_collection: Spam YouTube Collection
+    :return: PyPlot visuals
     """
 
     spam_author_collection = dict.fromkeys(spam_collection)
@@ -41,7 +41,6 @@ def author_visualisation(spam_collection):
     values = []
     iterator = 5
     for spam in reversed(spam_list):
-        print spam
         group.append(spam[0])
         values.append(spam[1])
         if iterator == 0:
@@ -53,16 +52,17 @@ def author_visualisation(spam_collection):
     plt.barh(y_pos, values, align='center', alpha=0.5)
     plt.yticks(y_pos, group)
     plt.xlabel('Number of Spam Comments')
-    plt.title('Top 5 Spamming Authors')
+    plt.ylabel('YouTube Author')
+    plt.title('Top 5 Spamming Authors \nin YouTube Comment Corpus')
 
     plt.show()
 
 
 def url_visualisation(spam_collection):
     """
-    
-    :param spam_collection: 
-    :return: 
+    Find URL presence within spam comments and visualise
+    :param spam_collection: Spam YouTube Collection
+    :return: PyPlot Visuals
     """
 
     spam_url_count = 0
@@ -83,13 +83,19 @@ def url_visualisation(spam_collection):
     colors = ['lightcoral', 'lightskyblue']
     explode = (0.3, 0)
 
-    plt.title('URL Presence in Spam and Non-Spam Comments')
-    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=False, startangle=140)
-
+    plt.title('URL Presence within Spam and Non-Spam Comments \n in YouTube Comment Corpus')
+    plt.pie(sizes, explode=explode, colors=colors, autopct='%1.1f%%', shadow=False, startangle=140)
+    plt.legend(['Spam','Not Spam'], loc='best')
     plt.axis('equal')
     plt.show()
 
+
 def check_hour_range(hour):
+    """
+    Check which stage of the day an hour falls
+    :param hour: hour as a integer
+    :return: String of time in day
+    """
     if 0 <= hour <= 5:
         return 'Early Morning'
     if 6 <= hour <= 11:
@@ -99,15 +105,18 @@ def check_hour_range(hour):
     if 18 <= hour <= 23:
         return 'Evening'
 
+
 def time_visualisation(spam_collection):
     """
-    
-    :param spam_collection: 
-    :return: 
+    Visualise the time of day when comments were placed on various YouTube videos
+    :param spam_collection: Spam YouTube Collection
+    :return: PyPlot visuals
     """
+    # Define range hash tables
     spamtime_ranges = {'Early Morning': 0, "Day Time": 0, "Afternoon": 0, "Evening": 0}
     nonspamtime_ranges = {'Early Morning': 0, "Day Time": 0, "Afternoon": 0, "Evening": 0}
 
+    # Iterate through each document and check when the comment was placed on the video
     for doc, content in spam_collection.iteritems():
         spam_set = content.loc[content['class'] == 'Spam']
         nonspam_set = content.loc[content['class'] == "Not Spam"]
@@ -122,22 +131,24 @@ def time_visualisation(spam_collection):
                 hour = int(parse(str(date)).time().hour)
                 nonspamtime_ranges[check_hour_range(hour)] += 1
 
+    # Plot stacked bar chart showing both spam and non-spam comments categorised
     y_pos = np.arange(len(spamtime_ranges.keys()))
 
     plt.bar(y_pos, spamtime_ranges.values(), align='center', color='indianred', label='Spam', alpha=0.5)
     plt.bar(y_pos, nonspamtime_ranges.values(), align='center', color='darkred', label='Not Spam', alpha=0.5)
     plt.xticks(y_pos, spamtime_ranges.keys())
     plt.ylabel('Time of Day')
-    plt.title('Distribution of Comments by Time of Day')
+    plt.title('Distribution of Comments by Time of Day \n in YouTube Comment Corpus')
     plt.legend(loc='best')
 
     plt.show()
 
+
 def date_visualisation(spam_collection):
     """
-    
-    :param spam_collection: 
-    :return: 
+    Visualise spam frequencies for each particular year captured in the corpus
+    :param spam_collection: Spam YouTube Collection
+    :return: PyPlot visuals
     """
     yearly_spam = {'2013': 0, "2014": 0, "2015": 0}
     for doc, content in spam_collection.iteritems():
@@ -152,7 +163,7 @@ def date_visualisation(spam_collection):
     plt.bar(y_pos, yearly_spam.values(), align='center', alpha=0.5)
     plt.xticks(y_pos, sorted(yearly_spam.keys()))
     plt.ylabel('Number of Spam Comments')
-    plt.title('Spam Comments per Year')
+    plt.title('Spam Comments per Year \n in YouTube Comment Corpus')
 
     plt.show()
 
@@ -191,21 +202,19 @@ def term_visualisation(spam_collection):
     # Apply emphasis to the top three spam terms
     explode = (0.2, 0.1, 0.05, 0, 0, 0, 0, 0, 0, 0)
     # Plot the spam terms as a pie chart
-    plt.title('Most Frequent Spam Terms')
+    plt.title('Most Frequent Spam Terms in YouTube Comment Corpus')
     plt.pie(values, explode=explode, labels=labels, shadow=False, startangle=140)
 
     plt.axis('equal')
     plt.show()
 
-def parse_data_collection():
+
+def visualise_relationships(collection):
     """
-    
-    :return: 
+    Plot various graphs to represent relationships between variables
+    :param collection: YouTube Spam data-set 
+    :return: PyPlot visuals
     """
-    # Create new document collection
-    collection = DocumentCollection()
-    # Populate the document map with data frames and unique key-sets
-    collection.populate_map()
     author_content = {}
 
     for document, content in collection.document_map.iteritems():
@@ -217,6 +226,32 @@ def parse_data_collection():
     date_visualisation(collection.document_map)
     time_visualisation(collection.document_map)
     author_visualisation(author_content)
+
+def summarise_columns(collection):
+    keys = collection.document_map.keys()
+    frames = []
+    for key in keys:
+        frames.append(collection.document_map[key])
+    merge = pd.concat(frames)
+    print merge['id'].describe(), "\n"
+    print merge['author'].describe(), "\n"
+    print merge['content'].describe(), "\n"
+    print merge['date'].describe(), "\n"
+    print merge['class'].describe()
+
+def parse_data_collection():
+    """
+    Parse data collection and begin summarisation and visualisation
+    :return: PyPlot generated data and textual summaries
+    """
+    # Create new document collection
+    collection = DocumentCollection()
+    # Populate the document map with data frames and unique key-sets
+    collection.populate_map()
+    # Create description for each column (text data cannot be visualised well)
+    summarise_columns(collection)
+    # Visualise relationships between columns
+    visualise_relationships(collection)
 
 
 if __name__ == "__main__": parse_data_collection()
