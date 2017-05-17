@@ -5,6 +5,7 @@ Assignment 2 - Practical Data Science
 
 import matplotlib.pyplot as plt
 from include.DocumentCollection import *
+from include.NeuralNetwork import *
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
@@ -111,8 +112,6 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
         # Predict "spam" or "not spam" using the test set
         predictions = pipeline.predict(comment_test)
 
-        # pprint.pprint(pipeline.named_steps['vectorizer'].vocabulary_)
-
         analysis = analyse_results(class_test, predictions, fold, name, ngram_flag)
         f1_scores.append(analysis[0])
         precision_scores.append(analysis[1])
@@ -125,7 +124,7 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
     classification_error = (1-(sum(accuracy_scores) / len(accuracy_scores))) * 100
 
     print "Results for --", name, "-- classifier over ", folds, "Folds - ", sub_title
-    print "Classification Error Rate: ", classification_error, "%"
+    print "K-Fold Classification Error Rate: ", classification_error, "%"
     print "F1 Score: ", f1_result, "%"
     print "Precision: ", precision_result, "%"
     print "Recall: ", recall_result, "%", "\n"
@@ -198,6 +197,8 @@ def parse_data_collection():
     title = "K Nearest Neighbours"
     classifier_analysis(knn_classifier, collection, title)
 
+    #neural_network = NeuralNetwork()
+    #neural_network.train_network(collection)
 
 if __name__ == "__main__":
     parse_data_collection()

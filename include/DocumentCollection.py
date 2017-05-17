@@ -1,3 +1,4 @@
+import re
 import random
 import pandas as pd
 from Settings import *
@@ -22,6 +23,7 @@ class DocumentCollection:
         """
         # Declare constants for CSV parsing
         header = ["id", "author", "date", "content", "class"]
+        dtypes = {"id": "object", "author": "object", "date": "object", "content": "object", "class": "int64"}
         # Read data into document map
         for filename in os.listdir(DATA_ROOT):
             # Ensure the file is a CSV file
@@ -29,7 +31,8 @@ class DocumentCollection:
                 # Create path and key for hash table
                 file_path = DATA_ROOT + "/" + filename
                 file_key = os.path.splitext(filename)[0]
-                self.document_map[file_key] = pd.read_csv(file_path, sep=',', names=header, skiprows=1)
+                self.document_map[file_key] = pd.read_csv(file_path, sep=',', names=header, skiprows=1, dtype=dtypes,
+                                                          parse_dates=[2])
                 self.document_map[file_key]['class'] = \
                     self.document_map[file_key]['class'].map({1: 'Spam', 0: 'Not Spam'})
 
