@@ -5,7 +5,7 @@ Assignment 2 - Practical Data Science
 
 import matplotlib.pyplot as plt
 from include.DocumentCollection import *
-from include.NeuralNetwork import *
+from include.SupportVectorMachine import *
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
@@ -14,7 +14,7 @@ from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_sc
 from sklearn.pipeline import Pipeline
 
 
-def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngram_flag):
+def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, directory_src):
     """
 
     :param confusion_mat:
@@ -25,11 +25,7 @@ def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngra
     :return:
     """
     image_name = "Confusion_Matrix_" + str(iteration) + ".png"
-    directory = "data/Confusion_Matrices/" + classifier_name + "/"
-    if ngram_flag:
-        directory += "nGram_Results/"
-    else:
-        directory += "Single_Results/"
+    directory = "data/Confusion_Matrices/" + classifier_name + "/" + directory_src + "/"
     # Set class labels
     labels = ['Spam', 'Not Spam']
     # Create a matplotlib figure
@@ -45,6 +41,7 @@ def plot_confusion_matrix(confusion_mat, title, iteration, classifier_name, ngra
     ax.set_yticklabels([''] + labels)
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
+
 
     plt.savefig(directory + image_name)
     plt.close('all')
@@ -67,7 +64,7 @@ def cross_validation(collection):
     return x_train[1], x_test[1], y_train[1], y_test[1]
 
 
-def analyse_results(actual, predicted, iteration, classifier_name, ngram_flag):
+def analyse_results(actual, predicted, iteration, classifier_name, directory_src):
     """
 
     :param actual:
@@ -83,7 +80,7 @@ def analyse_results(actual, predicted, iteration, classifier_name, ngram_flag):
     precision = precision_score(actual, predicted, pos_label="Spam")
     recall = recall_score(actual, predicted, pos_label="Spam")
     accuracy = accuracy_score(actual, predicted)
-    plot_confusion_matrix(cm, "Spam vs. Not Spam - Fold " + str(iteration), iteration, classifier_name, ngram_flag)
+    plot_confusion_matrix(cm, "Spam vs. Not Spam - Fold " + str(iteration), iteration, classifier_name, directory_src)
 
     return score, precision, recall, accuracy
 
@@ -111,8 +108,7 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
 
         # Predict "spam" or "not spam" using the test set
         predictions = pipeline.predict(comment_test)
-
-        analysis = analyse_results(class_test, predictions, fold, name, ngram_flag)
+        analysis = analyse_results(class_test, predictions, fold, name, sub_title)
         f1_scores.append(analysis[0])
         precision_scores.append(analysis[1])
         recall_scores.append(analysis[2])
@@ -122,12 +118,13 @@ def pipeline_predict(collection, pipeline, name, ngram_flag, sub_title):
     precision_result = (sum(precision_scores) / len(precision_scores)) * 100
     recall_result = (sum(recall_scores) / len(recall_scores)) * 100
     classification_error = (1-(sum(accuracy_scores) / len(accuracy_scores))) * 100
-    
+
     print "Results for --", name, "-- classifier over ", folds, "Folds - ", sub_title
-    print "K-Fold Classification Error Rate: ", classification_error, "%"
-    print "F1 Score: ", f1_result, "%"
-    print "Precision: ", precision_result, "%"
-    print "Recall: ", recall_result, "%", "\n"
+    print "Confusion Matrix: Outputted to /Confusion_Matrices/ - See Report for Cluster"
+    print "Avg K-Fold Classification Error Rate: ", classification_error, "%"
+    print "Avg F1 Score: ", f1_result, "%"
+    print "Avg Precision: ", precision_result, "%"
+    print "Avg Recall: ", recall_result, "%", "\n"
 
 
 def build_pipeline(classifier, ngram_flag, tfidf_flag):
@@ -164,9 +161,9 @@ def classifier_analysis(classifier, collection, title):
     :param title:
     :return:
     """
-    ngram_title = "(1-gram and 2-gram)"
-    tfidf_title = "(1-gram and 2-gram & TF-IDF)"
-    normal_title = "(Direct values)"
+    ngram_title = "1-gram and 2-gram"
+    tfidf_title = "1-gram and 2-gram & TF-IDF"
+    normal_title = "Direct values"
 
     pipeline_predict(collection, build_pipeline(classifier, ngram_flag=False, tfidf_flag=False), title, False,
                      normal_title)
@@ -197,8 +194,10 @@ def parse_data_collection():
     title = "K Nearest Neighbours"
     classifier_analysis(knn_classifier, collection, title)
 
-    #neural_network = NeuralNetwork()
-    #neural_network.train_network(collection)
+    # Predict using a Support Vector Machine (separate feature selection)
+    title = "Support Vector Machine"
+    support_vector_machine = SupportVectorMachine()
+    support_vector_machine.train_model(collection, title)
 
 if __name__ == "__main__":
     parse_data_collection()

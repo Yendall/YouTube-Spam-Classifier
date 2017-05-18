@@ -1,9 +1,6 @@
 import operator
 import matplotlib.pyplot as plt
-import re
-import nltk
 import numpy as np
-import pandas as pd
 from nltk.corpus import stopwords
 from collections import Counter
 from include.DocumentCollection import *
@@ -12,7 +9,7 @@ from dateutil.parser import parse
 
 def contains_url(string):
     """
-    
+
     :param string: 
     :return: 
     """
@@ -78,14 +75,13 @@ def url_visualisation(spam_collection):
             if contains_url(row['content']):
                 nonspam_url_count += 1
 
-    labels = 'Spam', 'Not Spam'
     sizes = [spam_url_count, nonspam_url_count]
     colors = ['lightcoral', 'lightskyblue']
     explode = (0.3, 0)
 
     plt.title('URL Presence within Spam and Non-Spam Comments \n in YouTube Comment Corpus')
     plt.pie(sizes, explode=explode, colors=colors, autopct='%1.1f%%', shadow=False, startangle=140)
-    plt.legend(['Spam','Not Spam'], loc='best')
+    plt.legend(['Spam', 'Not Spam'], loc='best')
     plt.axis('equal')
     plt.show()
 
@@ -227,6 +223,7 @@ def visualise_relationships(collection):
     time_visualisation(collection.document_map)
     author_visualisation(author_content)
 
+
 def summarise_columns(collection):
     keys = collection.document_map.keys()
     frames = []
@@ -238,6 +235,7 @@ def summarise_columns(collection):
     print merge['content'].describe(), "\n"
     print merge['date'].describe(), "\n"
     print merge['class'].describe()
+
 
 def parse_data_collection():
     """
@@ -252,6 +250,5 @@ def parse_data_collection():
     summarise_columns(collection)
     # Visualise relationships between columns
     visualise_relationships(collection)
-
 
 if __name__ == "__main__": parse_data_collection()
