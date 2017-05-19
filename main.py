@@ -1,6 +1,12 @@
-# ********************************************************************************
-# ******************************* Assignment 2 ***********************************
-# ********************************************************************************
+#!/usr/bin/env python
+#!/usr/bin/env python -W ignore::DeprecationWarning
+
+# File name: main.py
+# Author: Max Yendall
+# Course: Practical Data Science
+# Date last modified: 19/05/2017
+# Python Version: 2.7
+
 from include.DocumentCollection import *
 from include.ClassificationModule import *
 from include.SupportVectorMachine import *
@@ -34,7 +40,8 @@ classification_module = ClassificationModule()
 
 # Predict using MultiNomial Naive Bayes (ngram model, normal model and TF-IDF model)
 nb_classifier = MultinomialNB()
-# Create new Pipeline
+
+# Create new Pipelines
 title = "MultiNomial Naive Bayes"
 classification_module.classifier_analysis(nb_classifier, collection, title)
 

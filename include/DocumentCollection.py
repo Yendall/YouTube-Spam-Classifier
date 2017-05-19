@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+#!/usr/bin/env python -W ignore::DeprecationWarning
+
+# File name: DocumentCollection.py
+# Author: Max Yendall
+# Course: Practical Data Science
+# Date last modified: 19/05/2017
+# Python Version: 2.7
+
 import re
 import random
 import pandas as pd

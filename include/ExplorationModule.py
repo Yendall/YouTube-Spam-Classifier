@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+#!/usr/bin/env python -W ignore::DeprecationWarning
+
+# File name: ExplorationModule.py
+# Author: Max Yendall
+# Course: Practical Data Science
+# Date last modified: 19/05/2017
+# Python Version: 2.7
+
 from nltk.corpus import stopwords
 from dateutil.parser import parse
 from collections import Counter
@@ -13,9 +22,9 @@ class ExplorationModule(object):
 
     def contains_url(self, string):
         """
-
-        :param string:
-        :return:
+        Uses regular expression matching to return all occurrences of a URL in a string
+        :param string: A sentence
+        :return: Count of occurrences of URLs
         """
         return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string)
 

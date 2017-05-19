@@ -1,4 +1,11 @@
-# !/usr/bin/env python -W ignore::DeprecationWarning
+#!/usr/bin/env python
+#!/usr/bin/env python -W ignore::DeprecationWarning
+
+# File name: SupportVectorMachine.py
+# Author: Max Yendall
+# Course: Practical Data Science
+# Date last modified: 19/05/2017
+# Python Version: 2.7
 
 from __future__ import division
 from string import punctuation
@@ -45,13 +52,19 @@ class SupportVectorMachine(object):
 
     def contains_url(self, string):
         """
-
-        :param string:
-        :return:
+        Uses regular expression matching to return all occurrences of a URL in a string
+        :param string: A sentence
+        :return: Count of occurrences of URLs
         """
         return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string)
 
     def extract_features(self, collection, spam_word_collection):
+        """
+        Extracts specific features in numeric form from a spam or non-spam comment
+        :param collection: Entire Spam Collection
+        :param spam_word_collection: Top 10 spam word occurrences
+        :return: Numeric vectors of features
+        """
         feature_set = {}
         feature_list = []
         comment_features = []
@@ -120,9 +133,9 @@ class SupportVectorMachine(object):
 
     def generate_top_spam_terms(self, collection):
         """
-        
-        :param collection: 
-        :return: 
+        Generate top 10 spam term occurrences in the spam data frame
+        :param collection: Spam collection
+        :return: Top 10 words as a vector
         """
 
         spam_counts = Counter()
@@ -152,10 +165,11 @@ class SupportVectorMachine(object):
 
     def train_model(self, spam_collection, title):
         """
-        
-        :param spam_collection: 
-        :param title: 
-        :return: 
+        Train a Support Vector Machine by extracting relevant features, splitting the features into training
+        and test sets, training the model and predicting on the test set
+        :param spam_collection: Entire Spam Collection
+        :param title: Title of the classifier (for output use)
+        :return: Classification results
         """
         spam_terms = self.generate_top_spam_terms(spam_collection.document_map)
         comment_features, class_features = self.extract_features(spam_collection.document_map, spam_terms)
@@ -175,14 +189,6 @@ class SupportVectorMachine(object):
         svc = svm.SVC(kernel='linear', C=c).fit(x_train, y_train)
 
         predicted = svc.predict(x_test)
-
-        # score
-        test_size = len(y_test)
-        score = 0
-        for i in range(test_size):
-            if predicted[i] == y_test[i]:
-                score += 1
-
         actual = y_test
 
         cm = confusion_matrix(y_test, predicted)
@@ -190,8 +196,9 @@ class SupportVectorMachine(object):
         precision = precision_score(actual, predicted, pos_label=1)
         recall = recall_score(actual, predicted, pos_label=1)
         accuracy = accuracy_score(actual, predicted)
+
         print "---------------------------"
-        print "Classifier Results for Support Vector Machine"
+        print "Classifier Results for ", title
         print "---------------------------"
         #self.plot_confusion_matrix(cm, "Spam vs Not Spam")
         print "Results for -- Support Vector Machine --"
