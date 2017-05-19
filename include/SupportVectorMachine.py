@@ -1,3 +1,5 @@
+# !/usr/bin/env python -W ignore::DeprecationWarning
+
 from __future__ import division
 from string import punctuation
 from collections import Counter
@@ -16,13 +18,10 @@ class SupportVectorMachine(object):
 
     def plot_confusion_matrix(self, confusion_mat, title):
         """
-
-        :param confusion_mat:
-        :param title:
-        :param iteration:
-        :param classifier_name:
-        :param ngram_flag:
-        :return:
+        Visualises a greyscale confusion matrix for the classification results
+        :param confusion_mat: Generated confusion matrix
+        :param title: Title of the visualisation
+        :return: Pyplot visuals
         """
 
         # Set class labels
@@ -45,6 +44,11 @@ class SupportVectorMachine(object):
         plt.close('all')
 
     def contains_url(self, string):
+        """
+
+        :param string:
+        :return:
+        """
         return re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', string)
 
     def extract_features(self, collection, spam_word_collection):
@@ -186,9 +190,10 @@ class SupportVectorMachine(object):
         precision = precision_score(actual, predicted, pos_label=1)
         recall = recall_score(actual, predicted, pos_label=1)
         accuracy = accuracy_score(actual, predicted)
-
+        print "---------------------------"
+        print "Classifier Results for Support Vector Machine"
+        print "---------------------------"
         #self.plot_confusion_matrix(cm, "Spam vs Not Spam")
-
         print "Results for -- Support Vector Machine --"
         print "Confusion Matrix: \n", cm
         print "Classification Error Rate: ", (1-accuracy)*100, " %"
