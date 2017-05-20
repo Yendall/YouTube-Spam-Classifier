@@ -38,18 +38,18 @@ exploration_module.visualise_relationships(collection)
 # Create new Classification Module object
 classification_module = ClassificationModule()
 
-# Predict using MultiNomial Naive Bayes (ngram model, normal model and TF-IDF model)
-nb_classifier = MultinomialNB()
-
-# Create new Pipelines
-title = "MultiNomial Naive Bayes"
-classification_module.classifier_analysis(nb_classifier, collection, title)
-
 # Predict using K Nearest Neighbours (ngram model, normal model and TF-IDF model)
 knn_classifier = KNeighborsClassifier()
 # Create new Pipelines
 title = "K Nearest Neighbours"
 classification_module.classifier_analysis(knn_classifier, collection, title)
+
+# Predict using MultiNomial Naive Bayes (ngram model, normal model and TF-IDF model)
+nb_classifier = MultinomialNB()
+# Create new Pipelines
+title = "MultiNomial Naive Bayes"
+classification_module.classifier_analysis(nb_classifier, collection, title)
+
 
 # *************************** Optional Extension ************************************
 
