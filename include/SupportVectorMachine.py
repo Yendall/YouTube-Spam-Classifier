@@ -187,7 +187,6 @@ class SupportVectorMachine(object):
         # Create support vector machine
         c = 1.0
         svc = svm.SVC(kernel='linear', C=c).fit(x_train, y_train)
-        self.plot_svm(x_train, y_train, svc)
         predicted = svc.predict(x_test)
         actual = y_test
 
