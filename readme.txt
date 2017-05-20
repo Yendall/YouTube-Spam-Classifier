@@ -1,5 +1,5 @@
-# Assignment 1: Data Cleaning and Summarising
-# Max Yendall : S3436993
+# Assignment 2: Data Modelling and Presentation
+# Max Yendall : s3436993
 
 #### Table of Contents
 
@@ -30,21 +30,23 @@
     This can be outputtd to the terminal if it is uncommented on line 88 of ClassificationModule.py
 
 2. [Explanation of Files]:
-    Header.py:
-        Class header for table look-ups. Essential for the functionality of task1_parser.py and task2_plotter.py
-    task1_parser.py:
-        Task 1 script which reads the TeachingRatings.csv file, sanitises the data and outputs to a new CSV
-    task2_plotter.py:
-        Task 2 script which reads the TeachingRatings_Clean.csv file and plots data as per specifications
+	main.py:
+		The main module modelled off the given template. Simply run this to step through all exploration, parsing and classification
+    	include/ClassificationModule.py:
+		The main classification class which classifies using Naive Bayes and K-Nearest Neighbours using Pipelining (sklearn)
+	include/ExplorationModule.py:
+		The main exploration class which explores statistical summaries and visualises relationships between variables
+	include/DocumentCollection.py:
+		The main parsing class which filters the data and creates a collection of spam documents
+	include/SupportVectorMachine.py:
+		The main SVM class for the optional extension. Includes feature extraction and classification using a Linear Kernel Support
+		Vector Machine
+	include/Settings.py:
+		A settings file to set up the environment, including NLTK redirection and root folders for data and project referencing
 
 3. [Running the scripts]:
-    Both scripts are built to be run sequentially. You must run task1_parser.py BEFORE running task2_plotter.py,
-    as the parser will output a new, cleaned CSV file for reference in the plotter script.
+	In order to run all four parts of this project, simply the following command from an iPython environment:
+	
+	%run main.py
 
-    * [Running task1_parser.py:
-        This Python script will run when calling the following command from an iPython environment:
-            %run task1_parser.py
-    * [Running task2_plotter.py:
-        This Python script will run when calling the following command from an iPython environment:
-            %run task2_plotter.py
 
