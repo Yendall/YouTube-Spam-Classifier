@@ -27,7 +27,7 @@
     Confusion Matrix Cluster:
     This Python application outputs confusion matrices as PNG images as it is not taking a single fold of classification, 
     but rather 10 different folds. Therefore the confusion matrix is NOT outputted as part of the classification results. 
-    This can be outputtd to the terminal if it is uncommented on line 88 of ClassificationModule.py
+    This can be outputted to the terminal if it is uncommented on line 88 of ClassificationModule.py
 
 2. [Explanation of Files]:
 	main.py:

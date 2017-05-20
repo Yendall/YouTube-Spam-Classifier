@@ -85,7 +85,7 @@ class ClassificationModule(object):
         recall = recall_score(actual, predicted, pos_label="Spam")
         accuracy = accuracy_score(actual, predicted)
         # Commented out for efficient, uncomment if you want to write confusion matrices to file
-        # plot_confusion_matrix(cm, "Spam vs. Not Spam - Fold " + str(iteration), iteration, classifier_name, directory_src)
+        # self.plot_confusion_matrix(cm, "Spam vs. Not Spam - Fold " + str(iteration), iteration, classifier_name, directory_src)
 
         return score, precision, recall, accuracy, cm
 
