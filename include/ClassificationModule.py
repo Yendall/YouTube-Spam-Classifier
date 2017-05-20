@@ -172,11 +172,8 @@ class ClassificationModule(object):
         print "Classifier Results for ", title
         print "---------------------------"
         self.pipeline_predict(collection, self.build_pipeline(classifier, ngram_flag=False, tfidf_flag=False), title,
-                              False,
                               normal_title)
         self.pipeline_predict(collection, self.build_pipeline(classifier, ngram_flag=True, tfidf_flag=False), title,
-                              True,
                               ngram_title)
         self.pipeline_predict(collection, self.build_pipeline(classifier, ngram_flag=True, tfidf_flag=True), title,
-                              True,
                               tfidf_title)

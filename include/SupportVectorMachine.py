@@ -1,5 +1,5 @@
-#!/usr/bin/env python
-#!/usr/bin/env python -W ignore::DeprecationWarning
+# !/usr/bin/env python
+# !/usr/bin/env python -W ignore::DeprecationWarning
 
 # File name: SupportVectorMachine.py
 # Author: Max Yendall
@@ -187,7 +187,7 @@ class SupportVectorMachine(object):
         # Create support vector machine
         c = 1.0
         svc = svm.SVC(kernel='linear', C=c).fit(x_train, y_train)
-
+        self.plot_svm(x_train, y_train, svc)
         predicted = svc.predict(x_test)
         actual = y_test
 
@@ -200,13 +200,13 @@ class SupportVectorMachine(object):
         print "---------------------------"
         print "Classifier Results for ", title
         print "---------------------------"
-        #self.plot_confusion_matrix(cm, "Spam vs Not Spam")
+        # self.plot_confusion_matrix(cm, "Spam vs Not Spam")
         print "Results for -- Support Vector Machine --"
         print "Confusion Matrix: \n", cm
-        print "Classification Error Rate: ", (1-accuracy)*100, " %"
-        print "F1 Score: ", score*100, "%"
-        print "Precision: ", precision*100, "%"
-        print "Recall: ", recall*100, "%", "\n"
+        print "Classification Error Rate: ", (1 - accuracy) * 100, " %"
+        print "F1 Score: ", score * 100, "%"
+        print "Precision: ", precision * 100, "%"
+        print "Recall: ", recall * 100, "%", "\n"
 
     def __init__(self):
         pass
