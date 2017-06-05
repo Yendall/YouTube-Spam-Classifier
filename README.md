@@ -16,10 +16,6 @@
 ### Content
 
 1. [Assumptions]:
-    * Classes:
-    This Python application uses an Object-Oriented Paradigm with the inclusion of multiple classes.
-    All class files MUST BE present in order for the scripts to execute properly. All scripts will work if kept in the same directory.
-
     * CSV Files:
     This Python application will read and write CSV files from the data directory ONLY. There is no user input and will
     only read a files specifically named and it must be located in the data directory of this
