@@ -1,4 +1,9 @@
 # YouTube Spam Classification
+
+<p align="center">
+  <img src="https://github.com/Yendall/Practical-Data-Science-A2/blob/master/data/email-spam.jpg">
+</p>
+
 # Author: Max Yendall
 
 #### Table of Contents
