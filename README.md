@@ -15,22 +15,7 @@
 
 ### Content
 
-1. [Assumptions]:
-    * CSV Files:
-    This Python application will read and write CSV files from the data directory ONLY. There is no user input and will
-    only read a files specifically named and it must be located in the data directory of this
-    application. If it is not present, the Python application will fail to run.
-
-    * iPython Execution:
-    This Python application is written as standard Python scripts, which can be executed from an iPython environment
-    using the %run command.
-    
-    * Confusion Matrix Cluster:
-    This Python application outputs confusion matrices as PNG images as it is not taking a single fold of classification, 
-    but rather 10 different folds. Therefore the confusion matrix is NOT outputted as part of the classification results. 
-    This can be outputtd to the terminal if it is uncommented on line 88 of ClassificationModule.py
-
-2. [Explanation of Files]:
+1. [Explanation of Files]:
       * main.py: The main module modelled off the given template. Simply run this to step through all exploration, parsing and classification
     
       * include/ClassificationModule.py: The main classification class which classifies using Naive Bayes and K-Nearest Neighbours using Pipelining (sklearn)
