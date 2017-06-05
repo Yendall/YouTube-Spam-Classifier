@@ -8,9 +8,8 @@
 
 #### Table of Contents
 
-1. [Assumptions]- Asssumptions needing to be met to ensure code will execute
-2. [Explanation of Files] - Explanation of all included files in this package
-3. [Running The Scripts]
+1. [Explanation of Files] - Explanation of all included files in this package
+2. [Running The Scripts]
     * [Running main.py]
 
 ### Content
@@ -29,6 +28,7 @@
       * include/Settings.py: A settings file to set up the environment, including NLTK redirection and root folders for data and project referencing
 
 3. [Running the scripts]:
+
 	In order to run all four parts of this project, simply the following command from an iPython environment:
 	
 	%run main.py
