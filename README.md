@@ -32,6 +32,7 @@
 2. [Explanation of Files]:
 	* main.py:
 		The main module modelled off the given template. Simply run this to step through all exploration, parsing and classification
+		
     	* include/ClassificationModule.py: The main classification class which classifies using Naive Bayes and K-Nearest Neighbours using Pipelining (sklearn)
 		
 	* include/ExplorationModule.py: The main exploration class which explores statistical summaries and visualises relationships between variables
