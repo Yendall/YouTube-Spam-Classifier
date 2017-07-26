@@ -23,7 +23,7 @@
 		
       * include/DocumentCollection.py: The main parsing class which filters the data and creates a collection of spam documents
 	
-      * include/SupportVectorMachine.py: The main SVM class for the optional extension. Includes feature extraction and classification using a Linear Kernel Support Vector Machine
+      * include/SupportVectorMachine.py: The main SVM class. Includes feature extraction and classification using a Linear Kernel Support Vector Machine
 		
       * include/Settings.py: A settings file to set up the environment, including NLTK redirection and root folders for data and project referencing
 
